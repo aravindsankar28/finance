@@ -1,0 +1,1 @@
+class BudgetForm(forms.Form):

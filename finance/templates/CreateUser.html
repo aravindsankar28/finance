@@ -1,0 +1,16 @@
+<html>
+<body>
+<form action="" method="POST">
+{% csrf_token %}
+Username : <input type="text" name="username"><br>
+Password : <input type="password" name="password"><br>
+<select name = "option">
+<option>EventCore</option>
+<option>EventCoord</option>
+<option>FinanceCore</option>
+<option>FinanceCoord</option>
+</select>
+<input type="submit" value="Create">
+</form>
+</body>
+</html>

@@ -1,0 +1,20 @@
+<html>
+<head><h1><CENTER><b>Welcome to Saarang Finance Portal</b></h1></head></center>
+<title>Finance Portal</title>
+<body style = "background-color:#E6E680">
+<center><img src="{{ MEDIA_URL }}/logo.png" /> </center>
+<form action = "" method="POST">
+	{% csrf_token %}
+<h2><center>Login</h2></center>
+<center>
+<table>
+<tr><td>Username:</td><td><input type ='text' name ='username' /></td></tr> 
+<tr><td>Password:</td> <td><input type ='password' name ='password' /></td></tr>
+<tr><td></td><td><input type = 'submit' value = 'Login' /></td></tr>
+</table>
+{% if flop == 0  %}<font color ='red'><b>User name or password incorrect</b></font>{%endif%} <br/>
+
+</form>
+</CENTER>
+</body>
+</html>

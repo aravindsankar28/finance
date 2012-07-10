@@ -1,0 +1,122 @@
+<html>
+<head>
+    <script type="text/javascript">
+    function changeA(x)
+    {
+    
+    TableA.deleteRow(x.rowIndex);
+   // return (x.rowIndex);
+    }
+    function changeB(x)
+    {
+    
+    TableB.deleteRow(x.rowIndex);
+   // return (x.rowIndex);
+    }
+	function enterA()
+	{ 
+	var first = document.getElementById("itemA").value;
+	var last = document.getElementById("priceA").value;
+
+	TableA.innerHTML += '<tr><td><input type = text name = rowA1 value ='+first+'></td>'+'<td><input type = text name = rowA2 rows = 1 cols = 1 value = '+last+'></td><td onclick = changeA(this.parentNode)><button type = button>delete</button></td></tr>';
+	
+	//alert("fygjhbm");
+	
+    }
+    function enterB()
+	{ 
+	var first = document.getElementById("itemB").value;
+	var last = document.getElementById("priceB").value;
+	TableB.innerHTML += '<tr><td><input type = text name = rowB1 value ='+first+'></td>'+'<td><input type = text name = rowB2 rows = 1 cols = 1 value = '+last+'></td><td onclick = changeB(this.parentNode)><button type = button>delete</button></td></tr>';
+	
+    }
+    </script>
+    </head>
+<body>
+{{u.event}}
+{% if b == None %}
+You currently do not have any approved budgets available.
+<form method="POST" action = "">
+{% csrf_token %}
+Total Budget according to Plan A : 
+<textarea rows="1" cols="10" name="PlanA"></textarea><br>
+Total Budget according to Plan B : 
+<textarea rows="1" cols="10" name="PlanB"></textarea><br>
+Budget splitup for Plan A :
+Item Name:<input type = "text" id = "itemA">
+Price:<input type = "text" id = "priceA">
+<input type="button" value="enter" onclick="enterA()">
+<table summary="" id="TableA" border="2px" >
+<th>Item</th>
+<th>Price</th>
+</table>
+Budget splitup for Plan B : 
+Item Name:<input type = "text" id = "itemB">
+Price:<input type = "text" id = "priceB">
+<input type="button" value="enter" onclick="enterB()">
+<table summary="" id="TableB" border="2px" >
+<th>Item</th>
+<th>Price</th>
+</table>
+<input type="submit" value="Submit">
+</form>
+{% else %}
+{% if us.get_profile.is_finance_core %}
+{% if size == 0 %}
+<span> No budget available for approval </span> 
+{% endif %}
+{% for budget in b %}
+PlanA :{{budget.planA}}<br>
+<table summary="" >
+<th>Item</th>
+<th>Price</th>
+{% for s in spA %}
+<tr>
+{% for t in s %}
+{% if t.budgetid == budget.budgetid %}
+<tr><td>{{t.item}}</td>
+<td>{{t.price}}</td></tr>
+{% endif %}
+{% endfor %}
+{% endfor %}
+</table>
+Plan B:{{budget.planB}}<br>
+<table summary="" >
+<th>Item</th>
+<th>Price</th>
+{% for s in spB %}
+{% for t in s %}
+{% if t.budgetid == budget.budgetid %}
+<tr><td>{{t.item}}</td>
+<td>{{t.price}}</td></tr>
+{% endif %}
+{% endfor %}
+{% endfor %}
+<tr><td><a href="/approve/{{budget.budgetid}}/" ><button>Approve</button></a></td><td>
+<a href="/reject/{{budget.budgetid}}/" ><button>Reject</button></a></td></tr>
+</table>
+{% endfor %}
+{% else %}
+Your budget has been approved<br>
+PlanA : {{b.planA}}<br>
+<table summary="" >
+<th>Item</th>
+<th>Price</th>
+{% for s in sp1 %}
+<tr><td>{{s.item}}</td>
+<td>{{s.price}}</td></tr>
+{% endfor %}
+</table>
+PlanB : {{b.planB}}<br>
+<table summary="" >
+<th>Item</th>
+<th>Price</th>
+{% for s in sp2 %}
+<tr><td>{{s.item}}</td>
+<td>{{s.price}}</td></tr>
+</table>
+{% endfor %}
+{% endif %}
+{% endif %}
+</body>
+</html>

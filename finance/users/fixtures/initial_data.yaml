@@ -1,0 +1,21 @@
+--- # Initial data to load for the users app
+# Groups
+- model: auth.Group
+  pk: 1
+  fields:
+    name: EventCore
+
+- model: auth.Group
+  pk: 2
+  fields:
+    name: EventCoord
+    
+
+- model: auth.Group
+  pk: 3
+  fields:
+    name: FinanceCore
+- model: auth.Group
+  pk: 4
+  fields:
+    name: FinanceCoord
