@@ -1,16 +1,13 @@
-<html>
-<body>
-<ul>
-{{us}}
-<li><a href="/budget/{{foobar}}/" >Budget portal</a></li>
-<li><a href="" >Advance requirements</a></li>
-<li><a href="" >Reimbursements portal</a></li>
-<li><a href="" >Finance coords<a></li>
-<li><a href="" >Finance policy</a></li>
-<li><a href="" >Coords portal</a></li>
-<li><a href="/logout/" >Logout</a></li>
-<li><a href="" >Help</a></li>
-
-</ul>
-</body>
-</html>
+{% extends "Index.html" %}
+{% block content %}
+User : {{request.user}} <br>
+{% if request.user.get_profile.is_event_coord %}
+Event :{{ue.event.name}}
+{% endif %}
+{% if request.user.get_profile.is_event_core %}
+<a href="/createUser/" >Create event coord login</a>
+{% endif %}
+{% if request.user.is_superuser %}
+<a href="/createUser/" >Create core login</a>
+{% endif %}
+{% endblock %}

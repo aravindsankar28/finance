@@ -1,0 +1,25 @@
+<html>
+<body>
+<ul>
+{% if request.user.get_profile.is_finance_core %}
+<li><a href="/budget/" >Budget portal</a>
+<li><a href="/advanceRequirements/" >Advance requirements</a></li>
+{% endif %}
+{% if request.user.get_profile.is_event_core %}
+<li><a href="/budget/" >Budget portal</a>
+<li><a href="/advanceRequirements/" >Advance requirements</a></li>
+{% else %}
+<li><a href="/budget/" >Budget portal</a></li>
+<li><a href="/advanceRequirements/" >Advance requirements</a></li>
+{% endif %}
+<li><a href="" >Reimbursements portal</a></li>
+<li><a href="" >Finance coords<a></li>
+<li><a href="" >Finance policy</a></li>
+<li><a href="" >Coords portal</a></li>
+<li><a href="/logout/" >Logout</a></li>
+<li><a href="" >Help</a></li>
+
+</ul>
+</body>
+</html>
+

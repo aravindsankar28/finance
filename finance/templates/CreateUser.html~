@@ -1,15 +1,27 @@
 <html>
 <body>
 <form action="" method="POST">
+Create Core <br>
 {% csrf_token %}
 Username : <input type="text" name="username"><br>
 Password : <input type="password" name="password"><br>
-<select>
+{% if request.user.is_superuser %}
+<select name = "option">
 <option>EventCore</option>
-<option>EventCoord</option>
 <option>FinanceCore</option>
-<option>FinanceCoord</option>
 </select>
+{% endif %}
+{% if request.user.get_profile.is_event_core %}
+<select name = "option">
+<option>EventCoord</option>
+</select>
+<select name="event">
+Assign event to event coord :
+{% for e in event %}
+<option>{{e.name}}</option> 
+{% endfor %}
+</select>
+{% endif %}
 <input type="submit" value="Create">
 </form>
 </body>

@@ -13,18 +13,25 @@ class UserEvent(models.Model):
 # Create your models here.
 	
 class Budget(models.Model):
-	user = models.ForeignKey(User)
+	event = models.ForeignKey(events)
+	#user = models.ForeignKey(User)
 	budgetid = models.AutoField(primary_key = True)
 	planA = models.CharField(max_length = 10)
 	planB = models.CharField(max_length = 10)
 	approve = models.BooleanField(default = False)
-
+	item_approval = models.BooleanField(default = False)
 class SplitA(models.Model):
 	budgetid = models.DecimalField(decimal_places = 0 ,max_digits = 10)
 	item = models.CharField(max_length = 25)
 	price = models.DecimalField(decimal_places = 2,max_digits = 10)
-	
+	balance = models.DecimalField(decimal_places = 2,max_digits = 10)
+	status = models.CharField(max_length = 10)
+	approve = models.BooleanField(default = False)
+	spid = models.AutoField(primary_key = True)
+	amount_debit = models.DecimalField(decimal_places = 2,max_digits = 10)
 class SplitB(models.Model):
 	budgetid = models.DecimalField(decimal_places = 0 ,max_digits = 10)
 	item = models.CharField(max_length = 25)
 	price = models.DecimalField(decimal_places = 2,max_digits = 10)
+	balance = models.DecimalField(decimal_places = 2,max_digits = 10)
+	status = models.CharField(max_length = 10)

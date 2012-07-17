@@ -1,0 +1,97 @@
+<html>
+<script type="text/javascript" >
+function validate()
+{
+var els = document.getElementsByClassName("amount");
+for (var i = 0 ; i<els.length; i++)
+{
+if(els[i].value<0)
+{
+document.getElementById("error").style.display = 'block';
+return false;
+}
+}
+}
+</script>
+{% if b == None %}
+No budget available
+{% endif %}
+{% if not request.user.get_profile.is_finance_core %}
+{% if request.user.get_profile.is_event_core %}
+{% for b in budgets %}
+{{b.event.name}}<br>
+<table summary="" border="2px" bgcolor="#aaff00">
+<th>Item</th>
+<th>Price</th>
+<th>Enter Amount</th>
+<th>Status</th>
+{% for s in sp %}
+{% for t in s %}
+{% if b.budgetid == t.budgetid %}
+<tr>
+<td>{{t.item}}</td>
+<td>{{t.price}}</td>
+<td></td>
+<td>{{t.status}}</td></tr>
+{% endif %}
+{% endfor %}
+{% endfor %}
+</table><br>
+{% endfor %}
+{% else %}
+{% if b == None %}
+{% else %}
+<table summary="" border="2px" bgcolor="#aaff00">
+<th>Item</th>
+<th>Price</th>
+<th>Enter Amount</th>
+<th>Request</th>
+<th>Status</th>
+{% for s in spA %}
+<tr>
+<td>{{s.item}}</td>
+<td>{{s.price}}</td>
+<form method="POST" action="">
+{% csrf_token %}
+<input type="hidden" name="spid" value="{{s.spid}}">
+<td><input type="text" name="amount" class="amount"></td>
+<td><button type="submit" onclick="return validate()">Request</button></td>
+</form>
+<td>{{s.status}}</td>
+</tr>
+{% endfor %}
+</table>
+Total Budget : {{b.planA}}
+<font color="red" style="display:none" id="error"> Amount to be withdrawn cannot be negative </font>
+{% endif %}
+{% endif %}
+{% else %}
+{% for b in budgets %}
+{{b.event.name}}<br>
+<table summary="" border="2px" bgcolor="#aaff00">
+<th>Item</th>
+<th>Price</th>
+<th>Amount Requested</th>
+<th>Request</th>
+<th>Status</th>
+{% for s in sp %}
+{% for t in s %}
+{% if b.budgetid == t.budgetid %}
+<tr>
+<td>{{t.item}}</td>
+<td>{{t.price}}</td>
+{% if not t.amount_debit == 0 %}
+<td>{{t.amount_debit}} requested </td>
+{% else %}
+<td>No request yet</td>
+{% endif %}
+<td><a href="/approve_advance/{{t.spid}}/" ><button type="button">Approve</button></a></td>
+<td>{{t.status}}</td>
+</tr>
+{% endif %}
+{% endfor %}
+{% endfor %}
+</table><br>
+{% endfor %}
+{% endif %}
+</html>

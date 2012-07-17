@@ -1,0 +1,112 @@
+<html>
+	<head>
+		<title>
+		 Welcome to Saarang Finance Portal
+		</title>
+        <style>
+            table
+            {
+                border : none !important;
+            }
+            tr
+            {
+                padding : 1px 3px;
+                border : 1px solid #CCC !important;
+            }
+            td
+            {
+                padding : 1px 3px;
+                border : 1px solid rgba(200,200,200,.3) !important;
+            }
+        </style>
+        <link rel = "stylesheet" type = "text/css" href = "{{ MEDIA_URL }}/Backend_Style.css">
+        {% block media %} {% endblock %}
+    </head>
+    <body>
+        <div id = "container">
+            <div id="top_container">
+                <div id = "logo_container" class="top">
+                    <center>
+                        <img src = "{{ MEDIA_URL }}/Saarang_Logo.jpg" style = "width:80%;height:100%">
+                    </center>
+                </div>
+                <div id = "title_container" class="top">
+                    <h1>Saarang Finance Portal - IIT Madras</h1>
+                </div>
+                <div id="menu_container" class="top">
+                    {% url 'home' as home_url %}
+                    <a href = "" class = "topmenu">Budget Portal</a>
+                    {% url 'dashboard' user.id as dashboard_url %}
+                    <a href = "" class = "topmenu">Advance requirements</a>
+                    {% url 'related_projects' user.id as related_projects_url %}
+                    <a href = "" class = "topmenu">Finance coords</a>
+<!--					{# {% url 'ideate' as ideate_url %} #}
+					<a href = "#" class = "topmenu">Ideate</a> -->
+               
+                       
+                    
+                </div>
+            </div>
+            <hr />
+            <div id = "bottom_container">
+                <div id = "left_menu">
+                    <div class = "menu_left">
+                        Welcome, {{user}}
+                    </div>
+                    <hr class = "menu">
+                    <div class = "menu_left">
+                        <p><a href="">Finance Policy</a></p>
+                    </div>
+                    <div class = "menu_left">
+                        {% url 'view_profile' user.id as view_profile_url %}
+                        <p><a href="">Profile</a></p>
+                    </div>
+                    <div class = "menu_left">
+                        {% url 'view_profile' user.id as view_profile_url %}
+                        <p><a href="">Help</a></p>
+                    </div>
+                    <!--
+                    <div class = "menu_left">
+                        <p><a href="https://docs.google.com/spreadsheet/viewform?formkey=dGZna2Z1TWZWR2hISjhQYkNrQy1UMGc6MQ">Join a Project</a></p>
+                    </div>
+                    
+                    <div class = "menu_left">
+                        {% url 'about' as about_url %}
+                        <p><a href="{{ about_url }}">About us</a></p>
+                    </div>
+                    -->
+<!--					<div class = "menu_left">
+    					<p>Managerial Team</p>
+					</div>
+					<div class = "menu_left">
+    					<p>Advisory Committee</P>
+					</div>
+-->
+                        <div class = "menu_left">
+                            <p><a href="">Coords Portal</a></p>
+                        </div>
+
+                        <div class = "menu_left">
+                            
+                            <p><a href="">Logout</a></p>
+                        </div>
+                  
+                        </div>
+                        <br/><br/><br/>
+             
+                </div>
+                <div id = "contents_container">
+                    <div id = "content">
+                        {% block content %}
+                            <div id = "cont_title">
+                            </div>
+                            <p></p>
+                    {% endblock %}
+                    </div>
+                </div>
+            </div>
+        </div>
+    </body>
+</html>
+
+

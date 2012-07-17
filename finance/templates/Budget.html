@@ -1,42 +1,16 @@
 <html>
 <head>
-    <script type="text/javascript">
-    function changeA(x)
-    {    
-    TableA.deleteRow(x.rowIndex);
-    }
-    function changeB(x)
-    {
-   
-    TableB.deleteRow(x.rowIndex);
-    }
-	function enterA()
-	{ 
-	var first = document.getElementById("itemA").value;
-	var last = document.getElementById("priceA").value;
-
-	TableA.innerHTML += '<tr><td><input type = text name = rowA1 value ='+first+'></td>'+'<td><input type = text name = rowA2 rows = 1 cols = 1 value = '+last+'></td><td onclick = changeA(this.parentNode)><button type = button>delete</button></td></tr>';
-	
-    }
-    function enterB()
-	{ 
-	var first = document.getElementById("itemB").value;
-	var last = document.getElementById("priceB").value;
-	TableB.innerHTML += '<tr><td><input type = text name = rowB1 value ='+first+'></td>'+'<td><input type = text name = rowB2 rows = 1 cols = 1 value = '+last+'></td><td onclick = changeB(this.parentNode)><button type = button>delete</button></td></tr>';
-	
-    }
+    <script type="text/javascript" src = "{{ MEDIA_URL}}/Script/budget.js">
     </script>
     </head>
 <body>
-{{u.event}}
 {% if b == None %}
+<!-- If user is an event coord  and no budgets are available -->
+{% if not request.user.get_profile.is_finance_core  %}
 You currently do not have any approved budgets available.
+<!-- renders form for submitting budget !-->
 <form method="POST" action = "">
 {% csrf_token %}
-Total Budget according to Plan A : 
-<textarea rows="1" cols="10" name="PlanA"></textarea><br>
-Total Budget according to Plan B : 
-<textarea rows="1" cols="10" name="PlanB"></textarea><br>
 Budget splitup for Plan A :
 Item Name:<input type = "text" id = "itemA">
 Price:<input type = "text" id = "priceA">
@@ -55,14 +29,16 @@ Price:<input type = "text" id = "priceB">
 </table>
 <input type="submit" value="Submit">
 </form>
+{% endif %}
 {% else %}
-{% if us.get_profile.is_finance_core %}
+<!-- If user is a finance core display plan A and plan B of the submitted budget with option to approve or reject-->
+{% if request.user.get_profile.is_finance_core %}
 {% if size == 0 %}
 <span> No budget available for approval </span> 
 {% endif %}
 {% for budget in b %}
-PlanA :{{budget.planA}}<br>
-<table summary="" >
+{{budget.event.name}}
+<table summary="" border="2px" bgcolor="#aaFF00" >
 <th>Item</th>
 <th>Price</th>
 {% for s in spA %}
@@ -75,8 +51,8 @@ PlanA :{{budget.planA}}<br>
 {% endfor %}
 {% endfor %}
 </table>
-Plan B:{{budget.planB}}<br>
-<table summary="" >
+Total budget for Plan A:{{budget.planA}}<br>
+<table summary="" border="2px" bgcolor="#aaFF00" >
 <th>Item</th>
 <th>Price</th>
 {% for s in spB %}
@@ -87,14 +63,35 @@ Plan B:{{budget.planB}}<br>
 {% endif %}
 {% endfor %}
 {% endfor %}
-<tr><td><a href="/approve/{{budget.budgetid}}/" ><button>Approve</button></a></td><td>
-<a href="/reject/{{budget.budgetid}}/" ><button>Reject</button></a></td></tr>
+</table>
+Total budget for Plan B:{{budget.planB}}<br>
+<a href="/approve/{{budget.budgetid}}/" ><button>Approve</button></a>
+<a href="/reject/{{budget.budgetid}}/" ><button>Reject</button></a>
+
+{% endfor %}
+
+{% else %}
+<!-- If user is an event core , display all budgets available !-->
+{% if request.user.get_profile.is_event_core %}
+{% for budget in budgets %}
+{{budget.event.name}}
+<table summary="" border="2px" bgcolor="#aaFF00" >
+<th>Item</th>
+<th>Price</th>
+{% for s in sp %}
+<tr>
+{% for t in s %}
+{% if t.budgetid == budget.budgetid %}
+<tr><td>{{t.item}}</td>
+<td>{{t.price}}</td></tr>
+{% endif %}
+{% endfor %}
+{% endfor %}
 </table>
 {% endfor %}
 {% else %}
 Your budget has been approved<br>
-PlanA : {{b.planA}}<br>
-<table summary="" >
+<table summary=""border="2px" bgcolor="#aaFF00" >
 <th>Item</th>
 <th>Price</th>
 {% for s in sp1 %}
@@ -102,15 +99,17 @@ PlanA : {{b.planA}}<br>
 <td>{{s.price}}</td></tr>
 {% endfor %}
 </table>
-PlanB : {{b.planB}}<br>
-<table summary="" >
+Total budget for PlanA : {{b.planA}}<br>
+<table summary="" border="2px" bgcolor="#aaFF00"> 
 <th>Item</th>
 <th>Price</th>
 {% for s in sp2 %}
 <tr><td>{{s.item}}</td>
 <td>{{s.price}}</td></tr>
-</table>
 {% endfor %}
+</table>
+Total budget for PlanB : {{b.planB}}<br>
+{% endif %}
 {% endif %}
 {% endif %}
 </body>

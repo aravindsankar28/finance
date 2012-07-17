@@ -2,7 +2,13 @@ from django.shortcuts import *
 from django.template import *
 from django.contrib.auth import models
 from django.contrib.auth.models import *
+from home.models import *
 def createUser(request):
+	if not request.user.is_authenticated():
+		return HttpResponse("Not authorised")
+	#if not request.user.is_superuser:
+	#	return HttpResponse("Not authorised")
+	event = events.objects.all()
 	if request.method == 'POST':
 		username = request.POST['username']
 		password = request.POST['password']
@@ -15,6 +21,10 @@ def createUser(request):
 			g.user_set.add(u)
 			g.save()
 		elif name == 'EventCoord':
+			event = request.POST['event']
+			ue = UserEvent(user = u )
+			e = events.objects.get(name = event)
+			ue.event = e
 			g = Group.objects.get(name = 'EventCoord')
 			g.user_set.add(u)
 			g.save()
@@ -30,5 +40,5 @@ def createUser(request):
 			g.save()
 		
 		u.save()	
-		return HttpResponseRedirect('/corepage/'+u.get_profile().userid+'/')
+		return HttpResponseRedirect('/')
 	return render_to_response('CreateUser.html',locals(),context_instance=RequestContext(request))
