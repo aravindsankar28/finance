@@ -1,9 +1,10 @@
-<html>
+{% extends "Index.html" %}
+{% block content %}
 <head>
     <script type="text/javascript" src = "{{ MEDIA_URL}}/Script/budget.js">
     </script>
     </head>
-<body>
+<body onload = "load()">
 {% if b == None %}
 <!-- If user is an event coord  and no budgets are available -->
 {% if not request.user.get_profile.is_finance_core  %}
@@ -32,7 +33,7 @@ Price:<input type = "text" id = "priceB">
 {% endif %}
 {% else %}
 <!-- If user is a finance core display plan A and plan B of the submitted budget with option to approve or reject-->
-{% if request.user.get_profile.is_finance_core %}
+{% if request.user.get_profile.is_finance_core  or request.user.get_profile.is_finance_coord %}
 {% if size == 0 %}
 <span> No budget available for approval </span> 
 {% endif %}
@@ -112,5 +113,5 @@ Total budget for PlanB : {{b.planB}}<br>
 {% endif %}
 {% endif %}
 {% endif %}
+{% endblock %}
 </body>
-</html>

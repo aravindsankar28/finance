@@ -1,0 +1,43 @@
+<html>
+<head>
+<script type="text/javascript" >
+  function change(x)
+    {    
+    Table.deleteRow(x.rowIndex);
+    }
+function enter()
+	{
+	 
+	var billno = document.getElementById("billno").value;
+	var details = document.getElementById("details").value;
+   var vendor = document.getElementById("vendor").value;
+   var amount = document.getElementById("amount").value;   
+	Table.innerHTML += '<tr><td><input type = text name = row1 value ='+billno+'></td><td><input type = text name = row3 rows = 1 cols = 1 value = '+details+'></td>'+'<td><input type = text name = row4 rows = 1 cols = 1 value = '+vendor+'></td>'+'<td><input type = text name = row5 rows = 1 cols = 1 value = '+amount+'></td><td onclick = change(this.parentNode)><button type = button>delete</button></td></tr>';
+	document.getElementById("billno").value = "";
+	document.getElementById("details").value = "";
+	document.getElementById("vendor").value = "";
+	document.getElementById("amount").value = "";
+
+    }
+</script></head>
+<body>
+Click <a href = "">here</a> for the finance policy.
+{% for b in budgets %}
+Event Name: {{b.event.name}}<br>
+Total Budget Sanctioned :{{b.planA}}<br>
+Balance left for the event: {{b.balance}}<br>
+billno<input type="text" id="billno">
+details<input type="text" id="details">
+vendor<input type="text" id="vendor">
+amount<input type="text" id="amount">
+<button type="button" onclick="enter()">enter</button>
+<center>
+<table id="Table" border="2px">
+<th>BillNo</th>
+<th>Details</th>
+<th>Vendor</th>
+<th>Amount</th>
+</table></center>
+{% endfor %}
+</body>
+</html>

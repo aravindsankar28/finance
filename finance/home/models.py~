@@ -14,7 +14,7 @@ class UserEvent(models.Model):
 	
 class Budget(models.Model):
 	event = models.ForeignKey(events)
-	user = models.ForeignKey(User)
+	#user = models.ForeignKey(User)
 	budgetid = models.AutoField(primary_key = True)
 	planA = models.CharField(max_length = 10)
 	planB = models.CharField(max_length = 10)

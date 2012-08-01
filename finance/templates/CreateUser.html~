@@ -1,10 +1,13 @@
 <html>
 <body>
-<form action="" method="POST">
-Create Core <br>
+<link rel="stylesheet" href="{{MEDIA_URL}}/bootstrap/css/bootstrap.css">
+<link rel="stylesheet" href="{{MEDIA_URL}}/bootstrap/css/bootstrap.min.css">
+<link rel="stylesheet" href="{{MEDIA_URL}}/bootstrap/css/bootstrap-responsive.css">
+<link rel="stylesheet" href="{{MEDIA_URL}}/bootstrap/css/bootstrap-responsive.min.css">
+<form action="" method="POST" class="well" style="width:500px; position:absolute; left:60px; top:60px;">
 {% csrf_token %}
-Username : <input type="text" name="username"><br>
-Password : <input type="password" name="password"><br>
+Username : <input type="text" name="username" placeholder = "Username" class="input-small"><br>
+Password : <input type="password" name="password" placeholder ="Password"><br>
 {% if request.user.is_superuser %}
 <select name = "option">
 <option>EventCore</option>
@@ -22,7 +25,19 @@ Assign event to event coord :
 {% endfor %}
 </select>
 {% endif %}
-<input type="submit" value="Create">
+{% if request.user.get_profile.is_finance_core %}
+<select name = "option">
+<option>FinanceCoord</option>
+</select>
+<select name="event">
+Assign event to finance coord :
+{% for e in event %}
+<option>{{e.name}}</option> 
+{% endfor %}
+</select>
+{% endif %}
+<br>
+<input type="submit" value="Create" class="btn btn-primary">
 </form>
 </body>
 </html>

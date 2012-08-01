@@ -1,6 +1,15 @@
 {% extends "Index.html" %}
 {% block content %}
-User : {{request.user}} <br>
-Event :
-<a href="/createUser/" >Create event coord</a>
+{% if request.user.get_profile.is_event_coord %}
+Event :{{ue.event.name}}
+{% endif %}
+{% if request.user.get_profile.is_event_core %}
+<a href="/createUser/">Create event coord login</a>
+{% endif %}
+{% if request.user.is_superuser %}
+<a href="/createUser/" >Create core login</a>
+{% endif %}
+{% if request.user.get_profile.is_finance_core %}
+<a href="/createUser/" >Create finance coord login</a>
+{% endif %}
 {% endblock %}

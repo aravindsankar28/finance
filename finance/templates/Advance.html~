@@ -1,4 +1,4 @@
-<html>
+{% extends "Index.html" %}
 <script type="text/javascript" >
 function validate()
 {
@@ -16,7 +16,9 @@ return false;
 {% if b == None %}
 No budget available
 {% endif %}
-{% if not request.user.get_profile.is_finance_core %}
+
+
+<!-- If user is an event core, display all the budgets with the split ups and the total budget and balance  -->
 {% if request.user.get_profile.is_event_core %}
 {% for b in budgets %}
 {{b.event.name}}<br>
@@ -38,9 +40,11 @@ No budget available
 {% endfor %}
 </table><br>
 {% endfor %}
-{% else %}
-{% if b == None %}
-{% else %}
+{% endif %}
+
+
+<!-- If user is an event coord ,display the budget along with option to request amount -->
+{% if request.user.get_profile.is_event_coord %}
 <table summary="" border="2px" bgcolor="#aaff00">
 <th>Item</th>
 <th>Price</th>
@@ -64,8 +68,8 @@ No budget available
 Total Budget : {{b.planA}}
 <font color="red" style="display:none" id="error"> Amount to be withdrawn cannot be negative </font>
 {% endif %}
-{% endif %}
-{% else %}
+<!-- If user is finance core/coord, display advance requirements submitted with option to approve -->
+{% if request.user.get_profile.is_finance_core or request.user.get_profile.is_finance_coord %}
 {% for b in budgets %}
 {{b.event.name}}<br>
 <table summary="" border="2px" bgcolor="#aaff00">

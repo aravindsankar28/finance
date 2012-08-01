@@ -1,1 +1,2 @@
-class BudgetForm(forms.Form):
+class CreateUser(forms.Form):
+	

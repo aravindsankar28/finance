@@ -1,20 +1,21 @@
 <html>
+<link rel="stylesheet" href="{{MEDIA_URL}}/bootstrap/css/bootstrap.css">
 <head><h1><CENTER><b>Welcome to Saarang Finance Portal</b></h1></head></center>
+<script type="text/javascript" src="http://saarang.org/2013/landing_page/logo_anim.js"></script>
 <title>Finance Portal</title>
-<body style = "background-color:#E6E680">
-<center><img src="{{ MEDIA_URL }}/images/blackboard.jpg" /> </center>
-<form action = "" method="POST">
+<body style = "background-color:#E6E680" onLoad= "logo()">
+<center><img src="{{ MEDIA_URL }}/logo.png" /> </center>
+<form action = "" method="POST" class="well" style="position:absolute; width:300px; top:300px;left:515px;">
 	{% csrf_token %}
 <h2><center>Login</h2></center>
 <center>
 <table>
-<tr><td>Username:</td><td><input type ='text' name ='username' /></td></tr> 
-<tr><td>Password:</td> <td><input type ='password' name ='password' /></td></tr>
-<tr><td></td><td><input type = 'submit' value = 'Login' /></td></tr>
+<tr><td>Username:</td><td><input type ='text' name ='username' placeholder ='Username'/></td></tr> 
+<tr><td>Password:</td> <td><input type ='password' name ='password' placeholder = 'Password' /></td></tr>
+<tr><td></td><td><input type = 'submit' class="btn btn-primary" value = 'Login' /></td></tr>
 </table>
 {% if flop == 0  %}<font color ='red'><b>User name or password incorrect</b></font>{%endif%} <br/>
-
+</center>
 </form>
-</CENTER>
 </body>
 </html>

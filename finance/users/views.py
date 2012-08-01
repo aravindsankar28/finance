@@ -36,6 +36,11 @@ def createUser(request):
 			g.save()
 		
 		elif name == 'FinanceCoord':
+			event = request.POST['event']
+			ue = UserEvent(user = u )
+			e = events.objects.get(name = event)
+			ue.event = e
+			ue.save()
 			g = Group.objects.get(name = 'FinanceCoord')
 			g.user_set.add(u)
 			g.save()
@@ -43,3 +48,42 @@ def createUser(request):
 		u.save()	
 		return HttpResponseRedirect('/')
 	return render_to_response('CreateUser.html',locals(),context_instance=RequestContext(request))
+def login(request):
+	if request.method == 'POST':
+		username = request.POST['username']
+		password = request.POST['password']
+		user = auth.authenticate(username=username,password=password)
+		if user is not None:
+			auth.login(request,user)
+			a =  user.get_profile()
+			return HttpResponseRedirect('/corepage/'+str(a.userid)+'/')
+		return render_to_response('LoginPage.html',locals(),context_instance=RequestContext(request))
+	return render_to_response('LoginPage.html',locals(),context_instance=RequestContext(request))
+	
+def logout(request):
+    auth.logout(request)
+    return HttpResponseRedirect("/")
+def editprofile(request):
+	u = request.user
+	us = u.get_profile()
+	if request.method =='POST':
+		u.first_name=request.POST['first_name']
+		u.last_name=request.POST['last_name']
+		u.username=request.POST['username']
+		u.email=request.POST['email']
+		u.save()
+		return HttpResponseRedirect('/corepage/'+str(us.userid))
+	return render_to_response('EditProfile.html',locals(),context_instance=RequestContext(request))
+def changepw(request):
+	u = request.user
+	us = u.get_profile()
+	if request.method =='POST':
+		oldpw = request.POST['oldpw']
+		newpw = request.POST['newpw']
+		confirm = request.POST['confirmpw']
+		if u.check_password(oldpw) == True :
+			u.set_password(newpw)
+			u.save()
+			return HttpResponseRedirect('/corepage/'+str(us.userid))
+		return render_to_response('ChangePw.html',locals(),context_instance=RequestContext(request))
+	return render_to_response('ChangePw.html',locals(),context_instance=RequestContext(request))

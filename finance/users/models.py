@@ -28,5 +28,11 @@ class UserProfile(models.Model):
            return True
        except Group.DoesNotExist:
            return False
+    def is_finance_coord(self):
+       try:
+           self.user.groups.get(name = "FinanceCoord")
+           return True
+       except Group.DoesNotExist:
+           return False
 	
 # Create your models here.

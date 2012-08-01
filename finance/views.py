@@ -4,18 +4,7 @@ from django.template import *
 from django.contrib import auth
 from users.models import UserProfile
 from django.contrib.auth.models import *
-from home.models import *
-def login(request):
-	if request.method == 'POST':
-		username = request.POST['username']
-		password = request.POST['password']
-		user = auth.authenticate(username=username,password=password)
-		if user is not None:
-			auth.login(request,user)
-			a =  user.get_profile()
-			return HttpResponseRedirect('/corepage/'+str(a.userid)+'/')
-		return render_to_response('LoginPage.html',locals(),context_instance=RequestContext(request))
-	return render_to_response('LoginPage.html',locals(),context_instance=RequestContext(request))	
+from home.models import *	
 def corepage(request,foobar):
 	if request.user.is_authenticated():
 		if int(foobar) == request.user.get_profile().userid:
@@ -26,21 +15,18 @@ def corepage(request,foobar):
 				return render_to_response('CorePage.html',locals(),context_instance=RequestContext(request))
 			return render_to_response('CorePage.html',locals(),context_instance=RequestContext(request))
 		return HttpResponse("You are not authorised to view this page ")
-	return HttpResponse("You are not authorised to view this page ")
-	
-def logout(request):
-    auth.logout(request)
-    return HttpResponseRedirect("/")
-  
+	return HttpResponse("You are not authorised to view this page ")	
+	  
 def budget(request):		
 	#us = User.objects.get(pk = foobar)
+	# If user is an an event core #
 	if request.user.get_profile().is_event_core():
 		budgets = Budget.objects.all()
 		sp = []
 		for b in budgets:
 			tempA = SplitA.objects.filter(budgetid = b.budgetid)
 			sp.append(tempA)
-		#return render_to_response('Advance.html',locals(),context_instance=RequestContext(request))
+		
 		return render_to_response('Budget.html',locals(),context_instance=RequestContext(request))
 	if request.user.get_profile().is_finance_core():
 		try:
@@ -58,18 +44,43 @@ def budget(request):
 			tempB = SplitB.objects.filter(budgetid = budget.budgetid) 
 			spB.append(tempB)
 		return render_to_response('Budget.html',locals(),context_instance=RequestContext(request))
+	if request.user.get_profile().is_event_coord():
+		try:
+			u = UserEvent.objects.get(user = request.user)
+		except UserEvent.DoesNotExist:
+			u  = None
+		try:
+			b = Budget.objects.get(event = u.event)
+			sp1 = SplitA.objects.filter(budgetid = b.budgetid)
+			sp2 = SplitB.objects.filter(budgetid = b.budgetid)
+		except Budget.DoesNotExist:
+			b = None
+		#sp1 = SplitA.objects.filter(budgetid = b.budgetid)
+	if request.user.get_profile().is_finance_coord():
+		try:
+			u = UserEvent.objects.filter(user = request.user)
+		except UserEvent.DoesNotExist:
+			u  = None
+		b = []
+		try:
+			for e in u :
+				budget = Budget.objects.get(approve = False,event = e.event)
+				b.append(budget)
+		except Budget.DoesNotExist:
+			budget = None		
+		size  = len(b)			
+		spA = []
+		spB =[]
+		#sp = [] 
+		#return HttpResponse(b[0].approve)
+		for budget in b :		
+			tempA = SplitA.objects.filter(budgetid = budget.budgetid) 
+			spA.append(tempA)
+			tempB = SplitB.objects.filter(budgetid = budget.budgetid) 
+			spB.append(tempB)
+		return render_to_response('Budget.html',locals(),context_instance=RequestContext(request))	
+				
 		
-	try:
-		u = UserEvent.objects.get(user = request.user)
-	except UserEvent.DoesNotExist:
-		u  = None
-	try:
-		b = Budget.objects.get(event = u.event)
-		sp1 = SplitA.objects.filter(budgetid = b.budgetid)
-		sp2 = SplitB.objects.filter(budgetid = b.budgetid)
-	except Budget.DoesNotExist:
-		b = None
-	#sp1 = SplitA.objects.filter(budgetid = b.budgetid)
 	if request.method == "POST" :
 		splitA1 = request.POST.getlist('rowA1')
 		splitA2 = request.POST.getlist('rowA2')	
@@ -120,7 +131,7 @@ def approve(request,foobar):
 	b = Budget.objects.get(budgetid = foobar)
 	b.approve = True
 	b.save()
-	return HttpResponseRedirect('/budget/'+str(b.event.event_id)+'/')
+	return HttpResponseRedirect('/budget/')
 
 def reject(request,foobar):
 	b = Budget.objects.get(budgetid = foobar)
@@ -155,7 +166,7 @@ def advance(request):
 			tempA = SplitA.objects.filter(budgetid = b.budgetid)
 			sp.append(tempA)
 		return render_to_response('Advance.html',locals(),context_instance=RequestContext(request))
-	if not request.user.get_profile().is_finance_core():
+	if request.user.get_profile().is_event_coord():
 		try:
 			u = UserEvent.objects.get(user = request.user)
 		except User.DoesNotExist:
@@ -171,15 +182,30 @@ def advance(request):
 		except SplitA.DoesNotExist:
 			spA = None
 		return render_to_response('Advance.html',locals(),context_instance=RequestContext(request))
-	try:	
-		budgets = Budget.objects.filter(item_approval = True)
-	except Budget.DoesNotExist:
-		budgets = None
-	sp = []
-	for b in budgets:
-		tempA = SplitA.objects.filter(budgetid = b.budgetid)
-		sp.append(tempA)
-	return render_to_response('Advance.html',locals(),context_instance=RequestContext(request))
+	if request.user.get_profile().is_finance_core():
+		try:	
+			budgets = Budget.objects.all()
+		except Budget.DoesNotExist:
+			budgets = None
+		sp = []
+		for b in budgets:
+			tempA = SplitA.objects.filter(budgetid = b.budgetid)
+			sp.append(tempA)
+		return render_to_response('Advance.html',locals(),context_instance=RequestContext(request))
+	if request.user.get_profile().is_finance_coord():
+		try:
+			u = UserEvent.objects.get(user = request.user)
+		except UserEvent.DoesNotExist:
+			u  = None
+		try:	
+			budgets = Budget.objects.filter(event = u.event)
+		except Budget.DoesNotExist:
+			budgets = None
+		sp = []
+		for b in budgets:
+			tempA = SplitA.objects.filter(budgetid = b.budgetid)
+			sp.append(tempA)
+		return render_to_response('Advance.html',locals(),context_instance=RequestContext(request))
 def approve_advance(request,foobar):
 	s = SplitA.objects.get(spid = foobar)
 	s.approve = True
@@ -199,3 +225,14 @@ def approve_advance(request,foobar):
 def event(request,foobar):
 	event  = events.objects.all()
 	return render_to_response('Events.html',locals(),context_instance=RequestContext(request))
+
+def reimbursement(request):
+	budgets = Budget.objects.all()
+	spA = SplitA.objects.all()
+	for b in budgets :
+		b.balance = 0 
+		for s in spA:
+			if s.budgetid == b.budgetid :
+				b.balance  = b.balance + s.balance
+								
+	return render_to_response('Reimbursement.html',locals(),context_instance=RequestContext(request))

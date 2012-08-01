@@ -1,0 +1,33 @@
+<html>
+<link rel="stylesheet" type="text/css" href="css/bootstrap.css">
+<link rel="stylesheet" type="text/css" href="css/bootstrap.min.css">
+<link rel="stylesheet" type="text/css" href="css/bootstrap-responsive.css">
+<link rel="stylesheet" type="text/css" href="css/bootstrap-responsive.min.css">
+<script type="text/javascript" src = "js/bootstrap.js">
+</script>
+<script type="text/javascript" src = "js/bootstrap.min.js">
+
+</script>
+<form class="well">
+  <label>Username: </label><input type="text" class="span3" placeholder="Type something">
+  <!--<span class="help-block">Example block-level help text here.</span> -->
+  <label class="checkbox">
+    <input type="checkbox"> Check me out
+  </label>
+  <button type="submit" class="btn btn-primary">Submit</button>  <br>
+  
+<div class="btn-group">
+          <a class="btn btn-primary" href="#"><i class="icon-user icon-white"></i> User</a>
+          <a class="btn btn-primary dropdown-toggle" data-toggle="dropdown" href="#"><span class="caret"></span></a>
+          <ul class="dropdown-menu">
+            <li><a href="#"><i class="icon-pencil"></i> Edit</a></li>
+            <li><a href="#"><i class="icon-trash"></i> Delete</a></li>
+            <li><a href="#"><i class="icon-ban-circle"></i> Ban</a></li>
+            <li class="divider"></li>
+            <li><a href="#"><i class="i"></i> Make admin</a></li>
+          </ul>
+        </div>
+</form>
+
+
+</html>

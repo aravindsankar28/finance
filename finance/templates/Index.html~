@@ -1,25 +1,56 @@
 <html>
-<body>
-<ul>
-{% if request.user.get_profile.is_finance_core %}
-<li><a href="/budget/" >Budget portal</a>
-<li><a href="/advanceRequirements/" >Advance requirements</a></li>
-{% endif %}
-{% if request.user.get_profile.is_event_core %}
-<li><a href="/budget/" >Budget portal</a>
-<li><a href="/advanceRequirements/" >Advance requirements</a></li>
-{% else %}
-<li><a href="/budget/" >Budget portal</a></li>
-<li><a href="/advanceRequirements/" >Advance requirements</a></li>
-{% endif %}
-<li><a href="" >Reimbursements portal</a></li>
-<li><a href="" >Finance coords<a></li>
-<li><a href="" >Finance policy</a></li>
-<li><a href="" >Coords portal</a></li>
-<li><a href="/logout/" >Logout</a></li>
-<li><a href="" >Help</a></li>
-
-</ul>
+<body onload = "rload({{request.path}})">
+<link rel="stylesheet" href="{{MEDIA_URL}}/bootstrap/css/bootstrap.css">
+<link rel="stylesheet" href="{{MEDIA_URL}}/bootstrap/css/bootstrap.min.css">
+<link rel="stylesheet" href="{{MEDIA_URL}}/bootstrap/css/bootstrap-responsive.css">
+<link rel="stylesheet" href="{{MEDIA_URL}}/bootstrap/css/bootstrap-responsive.min.css">
+<script  src = "{{MEDIA_URL}}/bootstrap/js/bootstrap.js">
+</script>
+<script src = "{{MEDIA_URL}}/bootstrap/js/bootstrap.min.js">
+</script>
+<script src = "{{MEDIA_URL}}/Script/jquery.js">
+</script>
+<script type="text/javascript" src="http://twitter.github.com/bootstrap/assets/js/bootstrap-dropdown.js"></script>
+<script type="text/javascript" >
+    function rload(ob)
+    {
+    document.getElementById(ob).className = "active"; 
+    }
+</script>
+<div class="span3" style="position:absolute;top:100px;">
+          <div class="well sidebar-nav">
+            <ul class="nav nav-list">
+              <li class="nav-header">Sidebar</li>
+              <li id ="/corepage/{{request.user.get_profile.userid}}/" class="active" onclick="rload(this.id)"><a href="/corepage/{{request.user.get_profile.userid}}/">Dashboard</a></li>
+              <li id="/budget/"onclick="rload(this.id)"><a href="/budget/">Budget portal</a></li>
+				  <li id="/advanceRequirements/" ><a href="/advanceRequirements/">Advance requirements</a></li>
+				  <li><a href="/reimbursement/" >Reimbursements portal</a></li>
+				  <li><a href="" >Finance coords<a></li>
+				  <li><a href="" >Finance policy</a></li>
+				  <li><a href="" >Coords portal</a></li>		
+				  <li><a href="" >Help</a></li>
+				  <li>{% block list %} {% endblock %}</li>
+            </ul>
+          </div>
+        </div>
+        <div style="position:absolute; top:100px; left:350px; width:800px; height:500px; background-color:whiteSmoke;">
+        {% block content %}
+        {% endblock %}
+        </div>
+ <div style="position:absolute; right:100px; top:20px;">      
+  <ul class="dropdown" id="menu1">
+    <a class="btn btn-primary dropdown-toggle" data-toggle="dropdown" >
+      <i class="icon-user icon-white"></i> {{request.user}}
+      <span class="caret"></span>
+    </a>
+    <ul class="dropdown-menu">
+      <li><a href="/logout/">Logout</a></li>
+      <li><a href="/editprofile/">Edit Profile</a></li>
+      <li><a href="/changepw/" >Change Password</li>
+     
+    </ul>
+  </ul>
+ </div>
 </body>
 </html>
 
